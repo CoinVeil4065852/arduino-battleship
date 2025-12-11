@@ -86,6 +86,8 @@ void setup() {
   pinMode(PIN_BTN_FIRE, INPUT_PULLUP);
   pinMode(PIN_BUZZER, OUTPUT);
 
+  Serial.begin(9600);
+
   // Init LCD
   lcd.init();
   lcd.backlight();
