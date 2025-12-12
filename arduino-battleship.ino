@@ -79,11 +79,11 @@ const int debounceDelay = 50;
 // --------------------------------------------------------------------------
 void setup() {
   // Init Pins
-  pinMode(PIN_BTN_UP, INPUT_PULLUP);
-  pinMode(PIN_BTN_DOWN, INPUT_PULLUP);
-  pinMode(PIN_BTN_LEFT, INPUT_PULLUP);
-  pinMode(PIN_BTN_RIGHT, INPUT_PULLUP);
-  pinMode(PIN_BTN_FIRE, INPUT_PULLUP);
+  pinMode(PIN_BTN_UP, INPUT);
+  pinMode(PIN_BTN_DOWN, INPUT);
+  pinMode(PIN_BTN_LEFT, INPUT);
+  pinMode(PIN_BTN_RIGHT, INPUT);
+  pinMode(PIN_BTN_FIRE, INPUT);
   pinMode(PIN_BUZZER, OUTPUT);
 
   Serial.begin(9600);
@@ -157,11 +157,22 @@ void resetGame() {
 
 void handleInput() {
   // Read Buttons (Low = Pressed)
-  bool bUp = !digitalRead(PIN_BTN_UP);
-  bool bDown = !digitalRead(PIN_BTN_DOWN);
-  bool bLeft = !digitalRead(PIN_BTN_LEFT);
-  bool bRight = !digitalRead(PIN_BTN_RIGHT);
-  bool bFire = !digitalRead(PIN_BTN_FIRE);
+  bool bUp = digitalRead(PIN_BTN_UP);
+  bool bDown = digitalRead(PIN_BTN_DOWN);
+  bool bLeft = digitalRead(PIN_BTN_LEFT);
+  bool bRight = digitalRead(PIN_BTN_RIGHT);
+  bool bFire = digitalRead(PIN_BTN_FIRE);
+
+  Serial.print("U:");
+  Serial.print(bUp);
+  Serial.print(" D:");
+  Serial.print(bDown);
+  Serial.print(" L:");
+  Serial.print(bLeft);
+  Serial.print(" R:");
+  Serial.print(bRight);
+  Serial.print(" F:");
+  Serial.println(bFire);
 
   // --- CRITICAL FIX: SAFETY LOCK ---
   // If we just transitioned from a Long Press, we MUST wait for the user
