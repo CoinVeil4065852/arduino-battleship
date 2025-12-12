@@ -19,7 +19,7 @@
 // GAME CONSTANTS
 // --------------------------------------------------------------------------
 #define GRID_SIZE 8
-#define SHIPS_PER_PLAYER 10
+#define SHIPS_PER_PLAYER 3
 
 // Grid Cell States
 #define CELL_EMPTY 0
@@ -393,7 +393,19 @@ void handleImpact() {
     currentState = STATE_GAMEOVER;
     playWinMelody();
     updateLCD();
-  } else {
+  }
+  // NEW RULE: If Hit, stay in AIM state (Bonus Turn)
+  else if (hit) {
+    currentState = STATE_AIM;
+    // Don't reset cursor - keep it at hit location for easier followup
+    ignoreInputUntilRelease = true;  // Safety Lock
+    updateLCD();
+    // Overwrite the bottom line to give feedback
+    lcd.setCursor(0, 1);
+    lcd.print("Shoot Again!    ");
+  }
+  // If Miss, Switch Players
+  else {
     currentState = STATE_SWAP;
     updateLCD();
   }
@@ -412,16 +424,18 @@ void updateLCD() {
     lcd.setCursor(0, 1);
     lcd.print("Count: ");
     lcd.print(p1ShipCount);
-    lcd.print("/10");
-    if (p1ShipCount == 10) lcd.print(" OK?");
+    lcd.print("/");
+    lcd.print(SHIPS_PER_PLAYER);
+    if (p1ShipCount == SHIPS_PER_PLAYER) lcd.print(" OK?");
   } else if (currentState == STATE_SETUP_P2) {
     lcd.setCursor(0, 0);
     lcd.print("P2 Setup Ships");
     lcd.setCursor(0, 1);
     lcd.print("Count: ");
     lcd.print(p2ShipCount);
-    lcd.print("/10");
-    if (p2ShipCount == 10) lcd.print(" OK?");
+    lcd.print("/");
+    lcd.print(SHIPS_PER_PLAYER);
+    if (p2ShipCount == SHIPS_PER_PLAYER) lcd.print(" OK?");
   } else if (currentState == STATE_HANDOVER_SETUP) {
     // Explicit handover text for Setup Phase
     lcd.setCursor(0, 0);
